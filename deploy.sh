@@ -31,17 +31,28 @@ else
   git config --local credential.helper osxkeychain
 fi
 
-# 2. 변경사항 확인
+# 2. 변경사항 확인 + 커밋
 echo "[2/5] 변경사항 스테이징"
 git add -A
 if git diff --cached --quiet; then
-  echo "  → 변경사항 없음. 종료."
-  exit 0
+  echo "  → 새 변경사항 없음 (이미 커밋된 상태)"
+else
+  echo "[3/5] 커밋 생성"
+  git -c user.email="osstemswai@gmail.com" -c user.name="koosstem-lgtm" commit -q -m "$COMMIT_MSG"
 fi
 
-# 3. 커밋
-echo "[3/5] 커밋 생성"
-git -c user.email="osstemswai@gmail.com" -c user.name="koosstem-lgtm" commit -q -m "$COMMIT_MSG"
+# 푸시 필요한지 검사: upstream 미설정이거나 로컬에 unpushed 커밋이 있으면 푸시
+NEED_PUSH=false
+if ! git rev-parse --abbrev-ref --symbolic-full-name "@{u}" >/dev/null 2>&1; then
+  NEED_PUSH=true   # upstream 미설정 (한번도 push 안 함)
+elif [[ -n "$(git log @{u}..HEAD 2>/dev/null)" ]]; then
+  NEED_PUSH=true   # 로컬에 push 안 된 커밋 존재
+fi
+
+if [[ "$NEED_PUSH" != "true" ]]; then
+  echo "  → 푸시할 커밋도 없음. 종료."
+  exit 0
+fi
 
 # 4. 푸시
 echo "[4/5] GitHub로 푸시"
