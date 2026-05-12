@@ -266,6 +266,23 @@
   </header>
 
   <section>
+    <h2>🚨 단기 최대 주의 구간</h2>
+    <div style="background: linear-gradient(90deg, rgba(248,81,73,0.15), rgba(248,81,73,0.03)); border: 1px solid rgba(248,81,73,0.4); border-radius: 12px; padding: 16px 18px; margin-bottom: 16px;">
+      <div style="font-size: 16px; font-weight: 700; color: var(--danger); margin-bottom: 8px;">
+        5/15 (금) ~ 5/22 (금) — 1주일여
+      </div>
+      <div style="font-size: 14px; color: var(--text); line-height: 1.7;">
+        5/15 <b>파월 임기 종료 + 워시 취임 + 한국 선물·옵션 동시만기 + 美 옵션만기</b>가 같은 날 겹침.
+        과거 연준 의장 교체 타이밍에서 1주일여 변동성 유발 패턴 확인.
+        같은 구간에 <b>엔비디아 실적(5/21)</b>, <b>삼전·하닉 레버리지 ETF 상장(5/22)</b>, MSCI 반기리뷰·FOMC 의사록까지 연쇄.
+      </div>
+      <div style="font-size: 13px; color: var(--text-dim); margin-top: 8px;">
+        ⚠️ 매수 신규 진입 비추 / 보유 포지션 축소·헷지 우선
+      </div>
+    </div>
+  </section>
+
+  <section>
     <h2>이벤트 타임라인</h2>
     <div class="timeline" id="timeline"><!-- JS 렌더링 --></div>
   </section>
@@ -322,9 +339,9 @@
     },
     {
       date: "2026-05-15", dateText: "5/15 (금)",
-      title: "케빈 워시 연준 의장 취임 + 미중 회담 D2 + 미국 옵션 만기",
-      desc: "파월 임기 5/15 종료. 워시 취임 — 인플레이션 지표 변화로 금리 인하 근거 마련 기대. 대차대조표 점진적 축소 발언은 시장이 간과 중. 미국 옵션 만기까지 겹쳐 변동성 ↑.",
-      tags: [{label: "통화정책"}, {label: "옵션만기"}, {label: "조정가능", cls: "warn"}]
+      title: "🚨🚨 단기 최대 주의 구간 시작 — 파월 임기 종료 + 워시 취임 + 한국 선물·옵션 동시만기 + 美 옵션만기",
+      desc: "파월 임기 종료, 워시 취임. 한국 선물·옵션 동시만기일 + 美 옵션만기까지 같은 날 겹침. 과거 연준 의장 교체 타이밍 1주일여 변동성 유발 패턴 확인 — 5/22까지 단기 최대 주의 구간.",
+      tags: [{label: "통화정책"}, {label: "동시만기", cls: "danger"}, {label: "변동성↑↑", cls: "danger"}, {label: "최대주의", cls: "danger"}]
     },
     {
       date: "2026-05-18", dateText: "5/18 (월) ~ 19 (화)",
