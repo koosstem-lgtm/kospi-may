@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="cache-control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="pragma" content="no-cache">
+<meta http-equiv="expires" content="0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>이격도</title>
+<style>
+:root {
+  --bg: #0d1117;
+  --bg-card: #161b22;
+  --border: #30363d;
+  --text: #e6edf3;
+  --text-dim: #8b949e;
+  --accent: #58a6ff;
+  --up: #f85149;
+  --down: #4a9eff;
+  --flat: #8b949e;
+  --warn: #f0883e;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { overflow-x: hidden; }
+body {
+  font-family: -apple-system, "Pretendard", "Apple SD Gothic Neo", sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  padding: 16px 16px 60px;
+  -webkit-font-smoothing: antialiased;
+  max-width: 100vw;
+}
+.container { max-width: 1280px; margin: 0 auto; width: 100%; }
+.scroll-x { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+
+/* 탭 네비 */
+.tabs {
+  display: flex;
+  gap: 4px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 24px;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+.tabs .tab {
+  padding: 12px 20px;
+  color: var(--text-dim);
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+  border-bottom: 2px solid transparent;
+  white-space: nowrap;
+  transition: 0.15s;
+}
+.tabs .tab:hover { color: var(--text); }
+.tabs .tab.active {
+  color: var(--accent);
+  border-bottom-color: var(--accent);
+  font-weight: 700;
+}
+
+header { margin-bottom: 20px; }
+h1 { font-size: 22px; font-weight: 700; letter-spacing: -0.01em; }
+h2 { font-size: 16px; font-weight: 600; margin: 28px 0 12px; padding-left: 8px; border-left: 3px solid var(--accent); }
+.meta { color: var(--text-dim); font-size: 13px; margin-top: 6px; }
+
+.up { color: var(--up); }
+.down { color: var(--down); }
+.flat { color: var(--flat); }
+.err { color: var(--warn); font-size: 12px; }
+
+.btn {
+  display: inline-block;
+  padding: 10px 22px;
+  background: var(--bg-card);
+  color: var(--text);
+  text-decoration: none;
+  font-weight: 500;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: 0.15s;
+}
+.btn:hover { background: rgba(88,166,255,0.08); border-color: var(--accent); color: var(--accent); }
+.btn.primary { background: var(--accent); color: white; border-color: var(--accent); }
+.btn.primary:hover { background: #4894ec; color: white; }
+.btn.danger { background: var(--up); color: white; border-color: var(--up); }
+.btn.danger:hover { background: #e54339; color: white; }
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  overflow: hidden;
+  font-size: 13px;
+}
+th, td {
+  padding: 10px 12px;
+  text-align: left;
+  border-bottom: 1px solid var(--border);
+}
+th {
+  background: rgba(88,166,255,0.05);
+  font-weight: 600;
+  font-size: 11px;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+tr:last-child td { border-bottom: none; }
+td.num { text-align: right; font-variant-numeric: tabular-nums; }
+.code { font-size: 11px; color: var(--text-dim); font-family: monospace; }
+tbody tr:hover { background: rgba(88,166,255,0.04); }
+
+.empty {
+  text-align: center;
+  padding: 40px 20px;
+  color: var(--text-dim);
+  background: var(--bg-card);
+  border: 1px dashed var(--border);
+  border-radius: 10px;
+  font-size: 14px;
+}
+
+@media (max-width: 800px) {
+  body { padding: 12px 8px 40px; }
+  table { font-size: 12px; }
+  th, td { padding: 8px 6px; }
+  .tabs .tab { padding: 10px 14px; font-size: 13px; }
+}
+
+.disparity-hero {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 32px 20px;
+  text-align: center;
+  margin-bottom: 20px;
+}
+.hero-current {
+  font-size: 48px;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+}
+.hero-label { font-size: 13px; color: var(--text-dim); margin-top: 4px; }
+.hero-stage {
+  display: inline-block;
+  margin-top: 12px;
+  padding: 4px 14px;
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: 14px;
+  background: rgba(255,255,255,0.05);
+}
+.hero-stage.up { background: rgba(248,81,73,0.12); }
+.hero-stage.down { background: rgba(74,158,255,0.12); }
+.hero-desc { font-size: 13px; color: var(--text-dim); margin-top: 10px; }
+
+.disparity-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 8px;
+  margin-bottom: 24px;
+}
+.d-stat {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 10px 14px;
+}
+.d-label { font-size: 11px; color: var(--text-dim); margin-bottom: 4px; }
+.d-value { font-size: 17px; font-weight: 700; font-variant-numeric: tabular-nums; }
+
+.scenario-box {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.scenario-item {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 12px 14px;
+}
+.s-title { font-weight: 700; font-size: 14px; margin-bottom: 4px; }
+.s-body { font-size: 13px; color: var(--text-dim); line-height: 1.6; }
+
+.risk-note {
+  margin-top: 24px;
+  padding: 14px 16px;
+  background: rgba(248,81,73,0.06);
+  border: 1px solid rgba(248,81,73,0.3);
+  border-radius: 10px;
+  font-size: 13px;
+  line-height: 1.7;
+  color: var(--text);
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+
+<nav class="tabs">
+  <a href="../" class="tab">일정</a>
+  <a href="../rebalance/" class="tab">리밸런싱</a>
+  <a href="../control/" class="tab">매매 컨트롤</a>
+  <a href="../balance/" class="tab">잔고</a>
+  <a href="../disparity/" class="tab active">이격도</a>
+</nav>
+
+
+<header>
+  <h1 style="font-size: 20px;">KOSPI 50일선 이격도</h1>
+  <div class="meta">2026-05-12 15:42 KST · 네이버 금융 일봉</div>
+</header>
+
+
+<div class="disparity-hero">
+  <div class="hero-current up">127.22%</div>
+  <div class="hero-label">현재 50일선 이격도</div>
+  <div class="hero-stage up">위험</div>
+  <div class="hero-desc">**닷컴버블 고점 근접**</div>
+</div>
+
+<div class="disparity-stats">
+  <div class="d-stat">
+    <div class="d-label">KOSPI 종가</div>
+    <div class="d-value">7,643.15</div>
+  </div>
+  <div class="d-stat">
+    <div class="d-label">50일 이평선</div>
+    <div class="d-value">6,007.64</div>
+  </div>
+  <div class="d-stat">
+    <div class="d-label">60일 최고</div>
+    <div class="d-value up">130.79%</div>
+  </div>
+  <div class="d-stat">
+    <div class="d-label">60일 최저</div>
+    <div class="d-value">93.31%</div>
+  </div>
+</div>
+
+<h2>최근 90일 이격도 추이</h2>
+<div class="scroll-x">
+<svg viewBox="0 0 780 220" style="width: 100%; height: auto; background: var(--bg-card); border-radius: 10px;">
+  <!-- 130% 기준선 (닷컴 고점) -->
+  <line x1="30" y1="49.2" x2="750" y2="49.2" stroke="var(--up)" stroke-width="1" stroke-dasharray="5,3" opacity="0.7"/>
+  <text x="752" y="49.2" fill="var(--up)" font-size="10" text-anchor="start" dominant-baseline="middle">130</text>
+  <!-- 115% 과열선 -->
+  <line x1="30" y1="106.8" x2="750" y2="106.8" stroke="var(--warn)" stroke-width="1" stroke-dasharray="3,3" opacity="0.5"/>
+  <text x="752" y="106.8" fill="var(--warn)" font-size="10" text-anchor="start" dominant-baseline="middle">115</text>
+  <!-- 100% 기준 -->
+  <line x1="30" y1="164.3" x2="750" y2="164.3" stroke="var(--text-dim)" stroke-width="1" stroke-dasharray="3,3" opacity="0.4"/>
+  <text x="752" y="164.3" fill="var(--text-dim)" font-size="10" text-anchor="start" dominant-baseline="middle">100</text>
+  <!-- 이격도 라인 -->
+  <polyline points="30.0,121.7 38.6,120.6 47.1,121.5 55.7,119.5 64.3,117.1 72.9,112.1 81.4,110.5 90.0,104.9 98.6,102.4 107.1,98.5 115.7,102.0 124.3,101.8 132.9,99.8 141.4,98.3 150.0,103.6 158.6,93.4 167.1,88.3 175.7,86.2 184.3,88.6 192.9,114.8 201.4,87.8 210.0,83.8 218.6,104.4 227.1,113.2 235.7,98.0 244.3,100.3 252.9,98.7 261.4,87.8 270.0,92.1 278.6,81.3 287.1,74.1 295.7,74.6 304.3,68.2 312.9,63.0 321.4,49.7 330.0,59.0 338.6,97.4 347.1,153.3 355.7,118.1 364.3,120.7 372.9,148.1 381.4,129.2 390.0,125.9 398.6,130.3 407.1,139.7 415.7,137.3 424.3,132.9 432.9,114.8 441.4,128.9 450.0,129.7 458.6,158.2 467.1,149.0 475.7,144.3 484.3,158.6 492.9,161.3 501.4,173.6 510.0,190.0 518.6,160.8 527.1,178.6 535.7,169.1 544.3,164.8 552.9,162.5 561.4,137.3 570.0,145.1 578.6,140.8 587.1,145.4 595.7,135.5 604.3,128.3 612.9,120.5 621.4,124.8 630.0,124.3 638.6,114.4 647.1,114.3 655.7,112.5 664.3,114.3 672.9,107.0 681.4,107.2 690.0,105.7 698.6,113.4 707.1,93.1 715.7,66.3 724.3,62.2 732.9,64.2 741.4,46.2 750.0,59.9" fill="none" stroke="var(--accent)" stroke-width="2"/>
+</svg></div>
+
+<h2>역사적 비교 + 시나리오</h2>
+<div class="scenario-box">
+  <div class="scenario-item">
+    <div class="s-title up">닷컴버블 (1999~2000)</div>
+    <div class="s-body">50일선 이격도 <b>130%가 고점</b>. 그 후 코스피 -50% 폭락.</div>
+  </div>
+  <div class="scenario-item">
+    <div class="s-title up">이란 전쟁 직전 폭락</div>
+    <div class="s-body">코스피 이격도 <b>130%</b>에서 고점. 일시적 폭락 발생.</div>
+  </div>
+  <div class="scenario-item">
+    <div class="s-title">현재 추적 시나리오</div>
+    <div class="s-body">닷컴 궤적 그대로 가면 상반기 고점 <b>7,700~8,000</b> 형성 가능. 의심을 타고 조금씩 오르는 상황.</div>
+  </div>
+  <div class="scenario-item">
+    <div class="s-title up">지금 단계 (127.22%)</div>
+    <div class="s-body">130% 고점까지 약 <b>2.78%P</b> 남음. KOSPI 기준 <b>약 +2.2% 추가 상승</b> 시 위험 구간 진입.</div>
+  </div>
+</div>
+
+<div class="risk-note">
+  <b>리스크 관리 메모</b><br>
+  • 115% 이상: 신규 매수 신중 (이미 진입)<br>
+  • 125% 이상: 비중 축소 시작<br>
+  • 130% 이상: 적극 차익실현 권장<br>
+  • 이격도 단독으로 매매 결정 X — 거래량·외인 수급·매크로 함께 봐야
+</div>
+
+
+</div>
+</body>
+</html>

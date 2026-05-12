@@ -18,14 +18,17 @@
   --warn: #f0883e;
 }
 * { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { overflow-x: hidden; }
 body {
   font-family: -apple-system, "Pretendard", "Apple SD Gothic Neo", sans-serif;
   background: var(--bg);
   color: var(--text);
   padding: 16px 16px 60px;
   -webkit-font-smoothing: antialiased;
+  max-width: 100vw;
 }
-.container { max-width: 1280px; margin: 0 auto; }
+.container { max-width: 1280px; margin: 0 auto; width: 100%; }
+.scroll-x { overflow-x: auto; -webkit-overflow-scrolling: touch; }
 
 /* 탭 네비 */
 .tabs {
@@ -263,15 +266,17 @@ tbody tr:hover { background: rgba(88,166,255,0.04); }
 
 
 <nav class="tabs">
-  <a href="../" class="tab">5월 일정</a>
+  <a href="../" class="tab">일정</a>
   <a href="../rebalance/" class="tab">리밸런싱</a>
   <a href="../control/" class="tab active">매매 컨트롤</a>
+  <a href="../balance/" class="tab">잔고</a>
+  <a href="../disparity/" class="tab">이격도</a>
 </nav>
 
 
 <header>
   <h1>매매 컨트롤</h1>
-  <div class="meta">업데이트: 2026-05-12 15:33 KST</div>
+  <div class="meta">업데이트: 2026-05-12 15:42 KST</div>
 </header>
 
 <div class="action-bar">
@@ -314,9 +319,6 @@ tbody tr:hover { background: rgba(88,166,255,0.04); }
 </div>
 <p class='execute-note'>확정 시 텔레그램 열림 → 메시지 전송 → 봇 검토 → /confirm 토큰 발급</p>
 
-
-<h2>보유 종목</h2>
-<div class='empty'>보유 종목이 없습니다.</div>
 
 <h2>대기 중인 매매 제안</h2>
 <div class='empty'>대기 중인 매매 제안이 없습니다.</div>
