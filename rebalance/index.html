@@ -140,6 +140,20 @@ tbody tr:hover { background: rgba(88,166,255,0.04); }
 }
 .summary-label { font-size: 12px; color: var(--text-dim); margin-bottom: 4px; }
 .summary-value { font-size: 20px; font-weight: 700; font-variant-numeric: tabular-nums; }
+
+/* 수량 input 스타일 */
+.qty-input {
+  width: 70px;
+  padding: 6px 8px;
+  background: var(--bg);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  font-size: 13px;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+.qty-input:focus { outline: none; border-color: var(--accent); }
 </style>
 </head>
 <body>
@@ -155,7 +169,7 @@ tbody tr:hover { background: rgba(88,166,255,0.04); }
 
 <header>
   <h1>퀀트 리밸런싱 — <span style="color: var(--accent);">260512테스트</span></h1>
-  <div class="meta">업데이트: 2026-05-12 15:21 KST · KIS API 실시간 시세</div>
+  <div class="meta">업데이트: 2026-05-12 15:27 KST · KIS API 실시간 시세</div>
 </header>
 
 <div class="summary">
@@ -173,7 +187,7 @@ tbody tr:hover { background: rgba(88,166,255,0.04); }
   </div>
 </div>
 
-<table>
+<table id="rebalance-table">
 <thead>
 <tr>
   <th>No</th>
@@ -182,17 +196,112 @@ tbody tr:hover { background: rgba(88,166,255,0.04); }
   <th>현재가</th>
   <th>전일대비</th>
   <th>기준대비</th>
-  <th>비중</th>
-  <th>수량</th>
-  <th>기준 매수금액</th>
-  <th>현재 매수금액</th>
-  <th>차이</th>
+  <th>수량(편집)</th>
+  <th>매수비용</th>
 </tr>
 </thead>
 <tbody>
-<tr><td>1</td><td><b>HD현대에너지솔루션</b><br><span class='code'>322000</span></td><td class='num'>231,000</td><td class="num">207,500</td><td class="num up">+8.98%</td><td class="num down">-10.17%</td><td class='num'>4.95%</td><td class='num'>4</td><td class='num'>924,000</td><td class="num">830,000</td><td class="num down">-94,000</td></tr><tr><td>2</td><td><b>SK하이닉스</b><br><span class='code'>000660</span></td><td class='num'>1,286,000</td><td class="num">1,863,000</td><td class="num down">-0.90%</td><td class="num up">+44.87%</td><td class='num'>4.95%</td><td class='num'>1</td><td class='num'>1,286,000</td><td class="num">1,863,000</td><td class="num up">+577,000</td></tr><tr><td>3</td><td><b>SK스퀘어</b><br><span class='code'>402340</span></td><td class='num'>841,000</td><td class="num">1,132,000</td><td class="num down">-4.63%</td><td class="num up">+34.60%</td><td class='num'>4.95%</td><td class='num'>1</td><td class='num'>841,000</td><td class="num">1,132,000</td><td class="num up">+291,000</td></tr><tr><td>4</td><td><b>삼성전자</b><br><span class='code'>005930</span></td><td class='num'>220,500</td><td class="num">281,500</td><td class="num down">-1.40%</td><td class="num up">+27.66%</td><td class='num'>4.95%</td><td class='num'>4</td><td class='num'>882,000</td><td class="num">1,126,000</td><td class="num up">+244,000</td></tr><tr><td>5</td><td><b>대덕전자</b><br><span class='code'>353200</span></td><td class='num'>112,800</td><td class="num">128,000</td><td class="num up">+1.75%</td><td class="num up">+13.48%</td><td class='num'>4.95%</td><td class='num'>9</td><td class='num'>1,015,200</td><td class="num">1,152,000</td><td class="num up">+136,800</td></tr><tr><td>6</td><td><b>효성티앤씨</b><br><span class='code'>298020</span></td><td class='num'>518,000</td><td class="num">457,500</td><td class="num down">-2.56%</td><td class="num down">-11.68%</td><td class='num'>4.95%</td><td class='num'>2</td><td class='num'>1,036,000</td><td class="num">915,000</td><td class="num down">-121,000</td></tr><tr><td>7</td><td><b>로보티즈</b><br><span class='code'>108490</span></td><td class='num'>316,500</td><td class="num">344,500</td><td class="num down">-8.74%</td><td class="num up">+8.85%</td><td class='num'>4.95%</td><td class='num'>3</td><td class='num'>949,500</td><td class="num">1,033,500</td><td class="num up">+84,000</td></tr><tr><td>8</td><td><b>아모센스</b><br><span class='code'>-</span></td><td class='num'>23,050</td><td colspan="3" class="err">⚠️ 종목코드 미매핑</td><td class='num'>4.95%</td><td class='num'>43</td><td class='num'>991,150</td><td class="num">-</td><td class="num">-</td></tr><tr><td>9</td><td><b>SK이노베이션</b><br><span class='code'>096770</span></td><td class='num'>146,200</td><td class="num">128,600</td><td class="num down">-3.09%</td><td class="num down">-12.04%</td><td class='num'>4.95%</td><td class='num'>7</td><td class='num'>1,023,400</td><td class="num">900,200</td><td class="num down">-123,200</td></tr><tr><td>10</td><td><b>프로텍</b><br><span class='code'>053610</span></td><td class='num'>82,200</td><td class="num">86,600</td><td class="num up">+0.46%</td><td class="num up">+5.35%</td><td class='num'>4.95%</td><td class='num'>12</td><td class='num'>986,400</td><td class="num">1,039,200</td><td class="num up">+52,800</td></tr><tr><td>11</td><td><b>한화솔루션</b><br><span class='code'>009830</span></td><td class='num'>50,700</td><td class="num">42,950</td><td class="num down">-5.60%</td><td class="num down">-15.29%</td><td class='num'>4.95%</td><td class='num'>20</td><td class='num'>1,014,000</td><td class="num">859,000</td><td class="num down">-155,000</td></tr><tr><td>12</td><td><b>제이에스코퍼레이션</b><br><span class='code'>194370</span></td><td class='num'>14,790</td><td class="num">13,700</td><td class="num down">-3.72%</td><td class="num down">-7.37%</td><td class='num'>4.95%</td><td class='num'>67</td><td class='num'>990,930</td><td class="num">917,900</td><td class="num down">-73,030</td></tr><tr><td>13</td><td><b>S-Oil</b><br><span class='code'>-</span></td><td class='num'>134,500</td><td colspan="3" class="err">⚠️ 종목코드 미매핑</td><td class='num'>4.95%</td><td class='num'>7</td><td class='num'>941,500</td><td class="num">-</td><td class="num">-</td></tr><tr><td>14</td><td><b>호텔신라</b><br><span class='code'>-</span></td><td class='num'>65,500</td><td colspan="3" class="err">⚠️ 종목코드 미매핑</td><td class='num'>4.95%</td><td class='num'>15</td><td class='num'>982,500</td><td class="num">-</td><td class="num">-</td></tr><tr><td>15</td><td><b>ISC</b><br><span class='code'>-</span></td><td class='num'>242,500</td><td colspan="3" class="err">⚠️ 종목코드 미매핑</td><td class='num'>4.95%</td><td class='num'>4</td><td class='num'>970,000</td><td class="num">-</td><td class="num">-</td></tr><tr><td>16</td><td><b>브이엠</b><br><span class='code'>089970</span></td><td class='num'>53,400</td><td class="num">59,500</td><td class="num up">+1.88%</td><td class="num up">+11.42%</td><td class='num'>4.95%</td><td class='num'>19</td><td class='num'>1,014,600</td><td class="num">1,130,500</td><td class="num up">+115,900</td></tr><tr><td>17</td><td><b>RF머트리얼즈</b><br><span class='code'>327260</span></td><td class='num'>93,300</td><td class="num">118,800</td><td class="num up">+3.48%</td><td class="num up">+27.33%</td><td class='num'>4.95%</td><td class='num'>11</td><td class='num'>1,026,300</td><td class="num">1,306,800</td><td class="num up">+280,500</td></tr><tr><td>18</td><td><b>포스코스틸리온</b><br><span class='code'>-</span></td><td class='num'>8,390</td><td colspan="3" class="err">⚠️ 종목코드 미매핑</td><td class='num'>4.95%</td><td class='num'>118</td><td class='num'>990,020</td><td class="num">-</td><td class="num">-</td></tr><tr><td>19</td><td><b>하나머티리얼즈</b><br><span class='code'>-</span></td><td class='num'>75,500</td><td colspan="3" class="err">⚠️ 종목코드 미매핑</td><td class='num'>4.95%</td><td class='num'>13</td><td class='num'>981,500</td><td class="num">-</td><td class="num">-</td></tr><tr><td>20</td><td><b>자화전자</b><br><span class='code'>033240</span></td><td class='num'>48,650</td><td class="num">42,900</td><td class="num down">-8.04%</td><td class="num down">-11.82%</td><td class='num'>4.95%</td><td class='num'>20</td><td class='num'>973,000</td><td class="num">858,000</td><td class="num down">-115,000</td></tr>
+<tr data-code='322000' data-name='HD현대에너지솔루션' data-price='207500'><td>1</td><td><b>HD현대에너지솔루션</b><br><span class='code'>322000</span></td><td class='num'>231,000</td><td class="num">207,500</td><td class="num up">+8.98%</td><td class="num down">-10.17%</td><td><input type='number' class='qty-input' value='4' min='0' step='1' data-no='1'></td><td class='num row-total' data-no='1'>924,000</td></tr><tr data-code='000660' data-name='SK하이닉스' data-price='1863000'><td>2</td><td><b>SK하이닉스</b><br><span class='code'>000660</span></td><td class='num'>1,286,000</td><td class="num">1,863,000</td><td class="num down">-0.90%</td><td class="num up">+44.87%</td><td><input type='number' class='qty-input' value='1' min='0' step='1' data-no='2'></td><td class='num row-total' data-no='2'>1,286,000</td></tr><tr data-code='402340' data-name='SK스퀘어' data-price='1132000'><td>3</td><td><b>SK스퀘어</b><br><span class='code'>402340</span></td><td class='num'>841,000</td><td class="num">1,132,000</td><td class="num down">-4.63%</td><td class="num up">+34.60%</td><td><input type='number' class='qty-input' value='1' min='0' step='1' data-no='3'></td><td class='num row-total' data-no='3'>841,000</td></tr><tr data-code='005930' data-name='삼성전자' data-price='281500'><td>4</td><td><b>삼성전자</b><br><span class='code'>005930</span></td><td class='num'>220,500</td><td class="num">281,500</td><td class="num down">-1.40%</td><td class="num up">+27.66%</td><td><input type='number' class='qty-input' value='4' min='0' step='1' data-no='4'></td><td class='num row-total' data-no='4'>882,000</td></tr><tr data-code='353200' data-name='대덕전자' data-price='128000'><td>5</td><td><b>대덕전자</b><br><span class='code'>353200</span></td><td class='num'>112,800</td><td class="num">128,000</td><td class="num up">+1.75%</td><td class="num up">+13.48%</td><td><input type='number' class='qty-input' value='9' min='0' step='1' data-no='5'></td><td class='num row-total' data-no='5'>1,015,200</td></tr><tr data-code='298020' data-name='효성티앤씨' data-price='457500'><td>6</td><td><b>효성티앤씨</b><br><span class='code'>298020</span></td><td class='num'>518,000</td><td class="num">457,500</td><td class="num down">-2.56%</td><td class="num down">-11.68%</td><td><input type='number' class='qty-input' value='2' min='0' step='1' data-no='6'></td><td class='num row-total' data-no='6'>1,036,000</td></tr><tr data-code='108490' data-name='로보티즈' data-price='344500'><td>7</td><td><b>로보티즈</b><br><span class='code'>108490</span></td><td class='num'>316,500</td><td class="num">344,500</td><td class="num down">-8.74%</td><td class="num up">+8.85%</td><td><input type='number' class='qty-input' value='3' min='0' step='1' data-no='7'></td><td class='num row-total' data-no='7'>949,500</td></tr><tr data-code='' data-name='아모센스' data-price='23050'><td>8</td><td><b>아모센스</b><br><span class='code'>-</span></td><td class='num'>23,050</td><td colspan="3" class="err">⚠️ 종목코드 미매핑</td><td><input type='number' class='qty-input' value='43' min='0' step='1' data-no='8'></td><td class='num row-total' data-no='8'>991,150</td></tr><tr data-code='096770' data-name='SK이노베이션' data-price='128600'><td>9</td><td><b>SK이노베이션</b><br><span class='code'>096770</span></td><td class='num'>146,200</td><td class="num">128,600</td><td class="num down">-3.09%</td><td class="num down">-12.04%</td><td><input type='number' class='qty-input' value='7' min='0' step='1' data-no='9'></td><td class='num row-total' data-no='9'>1,023,400</td></tr><tr data-code='053610' data-name='프로텍' data-price='86600'><td>10</td><td><b>프로텍</b><br><span class='code'>053610</span></td><td class='num'>82,200</td><td class="num">86,600</td><td class="num up">+0.46%</td><td class="num up">+5.35%</td><td><input type='number' class='qty-input' value='12' min='0' step='1' data-no='10'></td><td class='num row-total' data-no='10'>986,400</td></tr><tr data-code='009830' data-name='한화솔루션' data-price='42950'><td>11</td><td><b>한화솔루션</b><br><span class='code'>009830</span></td><td class='num'>50,700</td><td class="num">42,950</td><td class="num down">-5.60%</td><td class="num down">-15.29%</td><td><input type='number' class='qty-input' value='20' min='0' step='1' data-no='11'></td><td class='num row-total' data-no='11'>1,014,000</td></tr><tr data-code='194370' data-name='제이에스코퍼레이션' data-price='13700'><td>12</td><td><b>제이에스코퍼레이션</b><br><span class='code'>194370</span></td><td class='num'>14,790</td><td class="num">13,700</td><td class="num down">-3.72%</td><td class="num down">-7.37%</td><td><input type='number' class='qty-input' value='67' min='0' step='1' data-no='12'></td><td class='num row-total' data-no='12'>990,930</td></tr><tr data-code='' data-name='S-Oil' data-price='134500'><td>13</td><td><b>S-Oil</b><br><span class='code'>-</span></td><td class='num'>134,500</td><td colspan="3" class="err">⚠️ 종목코드 미매핑</td><td><input type='number' class='qty-input' value='7' min='0' step='1' data-no='13'></td><td class='num row-total' data-no='13'>941,500</td></tr><tr data-code='' data-name='호텔신라' data-price='65500'><td>14</td><td><b>호텔신라</b><br><span class='code'>-</span></td><td class='num'>65,500</td><td colspan="3" class="err">⚠️ 종목코드 미매핑</td><td><input type='number' class='qty-input' value='15' min='0' step='1' data-no='14'></td><td class='num row-total' data-no='14'>982,500</td></tr><tr data-code='' data-name='ISC' data-price='242500'><td>15</td><td><b>ISC</b><br><span class='code'>-</span></td><td class='num'>242,500</td><td colspan="3" class="err">⚠️ 종목코드 미매핑</td><td><input type='number' class='qty-input' value='4' min='0' step='1' data-no='15'></td><td class='num row-total' data-no='15'>970,000</td></tr><tr data-code='089970' data-name='브이엠' data-price='59500'><td>16</td><td><b>브이엠</b><br><span class='code'>089970</span></td><td class='num'>53,400</td><td class="num">59,500</td><td class="num up">+1.88%</td><td class="num up">+11.42%</td><td><input type='number' class='qty-input' value='19' min='0' step='1' data-no='16'></td><td class='num row-total' data-no='16'>1,014,600</td></tr><tr data-code='327260' data-name='RF머트리얼즈' data-price='118800'><td>17</td><td><b>RF머트리얼즈</b><br><span class='code'>327260</span></td><td class='num'>93,300</td><td class="num">118,800</td><td class="num up">+3.48%</td><td class="num up">+27.33%</td><td><input type='number' class='qty-input' value='11' min='0' step='1' data-no='17'></td><td class='num row-total' data-no='17'>1,026,300</td></tr><tr data-code='' data-name='포스코스틸리온' data-price='8390'><td>18</td><td><b>포스코스틸리온</b><br><span class='code'>-</span></td><td class='num'>8,390</td><td colspan="3" class="err">⚠️ 종목코드 미매핑</td><td><input type='number' class='qty-input' value='118' min='0' step='1' data-no='18'></td><td class='num row-total' data-no='18'>990,020</td></tr><tr data-code='' data-name='하나머티리얼즈' data-price='75500'><td>19</td><td><b>하나머티리얼즈</b><br><span class='code'>-</span></td><td class='num'>75,500</td><td colspan="3" class="err">⚠️ 종목코드 미매핑</td><td><input type='number' class='qty-input' value='13' min='0' step='1' data-no='19'></td><td class='num row-total' data-no='19'>981,500</td></tr><tr data-code='033240' data-name='자화전자' data-price='42900'><td>20</td><td><b>자화전자</b><br><span class='code'>033240</span></td><td class='num'>48,650</td><td class="num">42,900</td><td class="num down">-8.04%</td><td class="num down">-11.82%</td><td><input type='number' class='qty-input' value='20' min='0' step='1' data-no='20'></td><td class='num row-total' data-no='20'>973,000</td></tr>
+<tr style="background: rgba(88,166,255,0.08); font-weight: 700;">
+  <td colspan="6" style="text-align: right;">합계</td>
+  <td class="num" id="total-qty">-</td>
+  <td class="num" id="total-cost">19,819,000원</td>
+</tr>
 </tbody>
 </table>
+
+<div style="margin-top: 24px; display: flex; gap: 12px; flex-wrap: wrap; align-items: center;">
+  <button onclick="resetQty()" class="btn">기준값 복원</button>
+  <button onclick="proportionalScale()" class="btn">한도(500만원)에 맞춤</button>
+  <button onclick="submitOrder('now')" class="btn primary">확정 — 즉시 시장가 매수</button>
+  <button onclick="submitOrder('pre_0830')" class="btn primary">확정 — 월요일 08:30 장전</button>
+  <button onclick="submitOrder('open_0900')" class="btn primary">확정 — 월요일 09:00 시초가</button>
+</div>
+
+<p style="margin-top: 16px; font-size: 12px; color: var(--text-dim);">
+  수량을 조정 후 확정 버튼 → 텔레그램이 열리고 매매 검토 메시지 자동 입력 → 전송 → 봇이 검토 후 /confirm 토큰 발급
+</p>
+
+<script>
+const TG_BOT = "https://t.me/bs_fanding_bot";
+const ORD_TYPE = "01"; // 시장가
+
+function recalc() {
+  let totalCost = 0;
+  let totalQty = 0;
+  document.querySelectorAll("tr[data-code]").forEach(tr => {
+    const qty = parseInt(tr.querySelector(".qty-input").value) || 0;
+    const price = parseFloat(tr.dataset.price) || 0;
+    const cost = qty * price;
+    const no = tr.querySelector(".qty-input").dataset.no;
+    document.querySelector(`.row-total[data-no="${no}"]`).textContent = cost.toLocaleString() + "원";
+    totalCost += cost;
+    totalQty += qty;
+  });
+  document.getElementById("total-qty").textContent = totalQty + "주";
+  document.getElementById("total-cost").textContent = totalCost.toLocaleString() + "원";
+
+  // 한도 초과 시 빨간색 경고
+  const totalEl = document.getElementById("total-cost");
+  totalEl.style.color = totalCost > 5000000 ? "var(--up)" : "";
+}
+
+document.querySelectorAll(".qty-input").forEach(inp => {
+  inp.addEventListener("input", recalc);
+});
+
+function resetQty() {
+  document.querySelectorAll("tr[data-code]").forEach(tr => {
+    const input = tr.querySelector(".qty-input");
+    input.value = input.defaultValue;
+  });
+  recalc();
+}
+
+function proportionalScale() {
+  // 합계가 500만원에 맞도록 비례 축소
+  let totalCost = 0;
+  document.querySelectorAll("tr[data-code]").forEach(tr => {
+    const qty = parseInt(tr.querySelector(".qty-input").value) || 0;
+    const price = parseFloat(tr.dataset.price) || 0;
+    totalCost += qty * price;
+  });
+  if (totalCost <= 0) return;
+  const ratio = 5000000 / totalCost;
+  document.querySelectorAll("tr[data-code]").forEach(tr => {
+    const input = tr.querySelector(".qty-input");
+    const orig = parseInt(input.value) || 0;
+    input.value = Math.floor(orig * ratio);
+  });
+  recalc();
+}
+
+function submitOrder(schedule) {
+  const items = [];
+  let priority = 1;
+  document.querySelectorAll("tr[data-code]").forEach(tr => {
+    const qty = parseInt(tr.querySelector(".qty-input").value) || 0;
+    if (qty <= 0) return;
+    items.push({
+      code: tr.dataset.code,
+      name: tr.dataset.name,
+      qty: qty,
+      price: parseFloat(tr.dataset.price) || 0,
+      priority: priority++
+    });
+  });
+  if (items.length === 0) {
+    alert("매수할 종목이 없습니다.");
+    return;
+  }
+  const payload = JSON.stringify({items: items});
+  const msg = `/batch ${payload} --schedule ${schedule}`;
+  const url = `${TG_BOT}?text=${encodeURIComponent(msg)}`;
+  window.open(url, "_blank");
+}
+
+recalc();
+</script>
 
 <div style="margin-top: 24px; text-align: center;">
   <a href="https://t.me/bs_fanding_bot?text=%2Frefresh" target="_blank" rel="noopener" style="display: inline-block; padding: 10px 24px; background: var(--bg-card); color: var(--text); text-decoration: none; font-weight: 500; border: 1px solid var(--border); border-radius: 8px; font-size: 14px;">
