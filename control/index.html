@@ -128,11 +128,134 @@ tbody tr:hover { background: rgba(88,166,255,0.04); }
 
 .action-bar {
   display: flex;
-  gap: 12px;
+  gap: 8px;
   flex-wrap: wrap;
-  margin-bottom: 24px;
+  margin-bottom: 20px;
 }
-.action-bar .btn { padding: 14px 24px; font-size: 14px; }
+.action-bar .btn { padding: 12px 18px; font-size: 14px; flex: 1; min-width: 130px; text-align: center; }
+
+/* 매수 컨트롤 카드 */
+.buy-summary {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 14px 16px;
+  margin-bottom: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.buy-summary-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 14px;
+}
+.buy-summary-label { color: var(--text-dim); }
+.buy-summary-value { font-weight: 700; font-variant-numeric: tabular-nums; font-size: 16px; }
+.buy-summary-value.over { color: var(--up); }
+
+.quick-actions {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+.quick-actions .btn { flex: 1; padding: 10px; font-size: 13px; }
+
+.buy-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+@media (min-width: 600px) {
+  .buy-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (min-width: 900px) {
+  .buy-grid { grid-template-columns: repeat(3, 1fr); }
+}
+
+.buy-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 14px 16px;
+  position: relative;
+  transition: 0.15s;
+}
+.buy-card.removed { display: none; }
+.buy-card:hover { border-color: var(--accent); }
+.card-delete {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text-dim);
+  font-size: 12px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: 0.15s;
+}
+.card-delete:hover { background: var(--up); color: white; border-color: var(--up); }
+.card-name { font-size: 16px; font-weight: 700; margin-bottom: 4px; padding-right: 32px; }
+.card-meta { font-size: 12px; color: var(--text-dim); font-family: monospace; margin-bottom: 10px; }
+.card-warn { font-size: 12px; color: var(--warn); margin-bottom: 8px; }
+
+.card-qty-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+.qty-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  color: var(--text);
+  font-size: 18px;
+  font-weight: 700;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+.qty-btn:hover { background: rgba(88,166,255,0.1); border-color: var(--accent); }
+.qty-input-big {
+  flex: 1;
+  height: 36px;
+  background: var(--bg);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  text-align: center;
+  font-size: 15px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+.qty-input-big:focus { outline: none; border-color: var(--accent); }
+.qty-input-big:disabled { opacity: 0.5; }
+.card-unit { font-size: 13px; color: var(--text-dim); flex-shrink: 0; }
+.card-cost { font-size: 13px; color: var(--text-dim); }
+.cost-value { color: var(--text); font-weight: 600; font-variant-numeric: tabular-nums; }
+
+.execute-bar {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 20px;
+}
+.btn.big { padding: 14px 20px; font-size: 15px; font-weight: 600; }
+@media (min-width: 700px) {
+  .execute-bar { flex-direction: row; }
+  .execute-bar .btn { flex: 1; }
+}
+.execute-note { font-size: 12px; color: var(--text-dim); text-align: center; margin-top: 12px; }
 </style>
 </head>
 <body>
@@ -148,14 +271,49 @@ tbody tr:hover { background: rgba(88,166,255,0.04); }
 
 <header>
   <h1>매매 컨트롤</h1>
-  <div class="meta">업데이트: 2026-05-12 15:27 KST</div>
+  <div class="meta">업데이트: 2026-05-12 15:33 KST</div>
 </header>
 
 <div class="action-bar">
-  <a href="https://t.me/bs_fanding_bot?text=%2Frefresh" class="btn primary" target="_blank">데이터 새로고침</a>
-  <a href="https://t.me/bs_fanding_bot?text=%2Fsellall" class="btn danger" target="_blank">일괄 매도 요청</a>
-  <a href="https://t.me/bs_fanding_bot?text=%2Fpending" class="btn" target="_blank">텔레그램으로 보기</a>
+  <a href="https://t.me/bs_fanding_bot?text=%2Frefresh" class="btn primary" target="_blank">새로고침</a>
+  <a href="https://t.me/bs_fanding_bot?text=%2Fsellall" class="btn danger" target="_blank">일괄 매도</a>
+  <a href="https://t.me/bs_fanding_bot?text=%2Fpending" class="btn" target="_blank">대기 매매</a>
 </div>
+
+
+<h2>리밸런싱 매수 컨트롤 — 260512테스트</h2>
+
+<div class='buy-summary'>
+  <div class='buy-summary-row'>
+    <span class='buy-summary-label'>합계</span>
+    <span class='buy-summary-value' id='total-cost'>0원</span>
+  </div>
+  <div class='buy-summary-row'>
+    <span class='buy-summary-label'>일일 한도</span>
+    <span class='buy-summary-value'>5,000,000원</span>
+  </div>
+  <div class='buy-summary-row'>
+    <span class='buy-summary-label'>한도 사용률</span>
+    <span class='buy-summary-value' id='usage-pct'>0%</span>
+  </div>
+</div>
+
+<div class='quick-actions'>
+  <button onclick='resetAllQty()' class='btn'>기준값 복원</button>
+  <button onclick='scaleToLimit()' class='btn'>한도에 맞춤</button>
+</div>
+
+<div class='buy-grid'>
+<div class='buy-card' data-code='322000' data-name='HD현대에너지솔루션' data-price='207000' data-no='1'>  <button class='card-delete' onclick='removeCard(this)' aria-label='삭제'>✕</button>  <div class='card-name'>HD현대에너지솔루션</div>  <div class='card-meta'>322000 · 207,000원</div>    <div class='card-qty-row'>    <button class='qty-btn' onclick='changeQty(this, -1)'>−</button>    <input type='number' class='qty-input-big' value='4' min='0' step='1'  oninput='recalcAll()'>    <button class='qty-btn' onclick='changeQty(this, 1)'>+</button>    <span class='card-unit'>주</span>  </div>  <div class='card-cost'>매수 비용: <span class='cost-value'>828,000</span>원</div></div><div class='buy-card' data-code='000660' data-name='SK하이닉스' data-price='1835000' data-no='2'>  <button class='card-delete' onclick='removeCard(this)' aria-label='삭제'>✕</button>  <div class='card-name'>SK하이닉스</div>  <div class='card-meta'>000660 · 1,835,000원</div>    <div class='card-qty-row'>    <button class='qty-btn' onclick='changeQty(this, -1)'>−</button>    <input type='number' class='qty-input-big' value='1' min='0' step='1'  oninput='recalcAll()'>    <button class='qty-btn' onclick='changeQty(this, 1)'>+</button>    <span class='card-unit'>주</span>  </div>  <div class='card-cost'>매수 비용: <span class='cost-value'>1,835,000</span>원</div></div><div class='buy-card' data-code='402340' data-name='SK스퀘어' data-price='1126000' data-no='3'>  <button class='card-delete' onclick='removeCard(this)' aria-label='삭제'>✕</button>  <div class='card-name'>SK스퀘어</div>  <div class='card-meta'>402340 · 1,126,000원</div>    <div class='card-qty-row'>    <button class='qty-btn' onclick='changeQty(this, -1)'>−</button>    <input type='number' class='qty-input-big' value='1' min='0' step='1'  oninput='recalcAll()'>    <button class='qty-btn' onclick='changeQty(this, 1)'>+</button>    <span class='card-unit'>주</span>  </div>  <div class='card-cost'>매수 비용: <span class='cost-value'>1,126,000</span>원</div></div><div class='buy-card' data-code='005930' data-name='삼성전자' data-price='279000' data-no='4'>  <button class='card-delete' onclick='removeCard(this)' aria-label='삭제'>✕</button>  <div class='card-name'>삼성전자</div>  <div class='card-meta'>005930 · 279,000원</div>    <div class='card-qty-row'>    <button class='qty-btn' onclick='changeQty(this, -1)'>−</button>    <input type='number' class='qty-input-big' value='4' min='0' step='1'  oninput='recalcAll()'>    <button class='qty-btn' onclick='changeQty(this, 1)'>+</button>    <span class='card-unit'>주</span>  </div>  <div class='card-cost'>매수 비용: <span class='cost-value'>1,116,000</span>원</div></div><div class='buy-card' data-code='353200' data-name='대덕전자' data-price='128000' data-no='5'>  <button class='card-delete' onclick='removeCard(this)' aria-label='삭제'>✕</button>  <div class='card-name'>대덕전자</div>  <div class='card-meta'>353200 · 128,000원</div>    <div class='card-qty-row'>    <button class='qty-btn' onclick='changeQty(this, -1)'>−</button>    <input type='number' class='qty-input-big' value='9' min='0' step='1'  oninput='recalcAll()'>    <button class='qty-btn' onclick='changeQty(this, 1)'>+</button>    <span class='card-unit'>주</span>  </div>  <div class='card-cost'>매수 비용: <span class='cost-value'>1,152,000</span>원</div></div><div class='buy-card' data-code='298020' data-name='효성티앤씨' data-price='460000' data-no='6'>  <button class='card-delete' onclick='removeCard(this)' aria-label='삭제'>✕</button>  <div class='card-name'>효성티앤씨</div>  <div class='card-meta'>298020 · 460,000원</div>    <div class='card-qty-row'>    <button class='qty-btn' onclick='changeQty(this, -1)'>−</button>    <input type='number' class='qty-input-big' value='2' min='0' step='1'  oninput='recalcAll()'>    <button class='qty-btn' onclick='changeQty(this, 1)'>+</button>    <span class='card-unit'>주</span>  </div>  <div class='card-cost'>매수 비용: <span class='cost-value'>920,000</span>원</div></div><div class='buy-card' data-code='108490' data-name='로보티즈' data-price='345000' data-no='7'>  <button class='card-delete' onclick='removeCard(this)' aria-label='삭제'>✕</button>  <div class='card-name'>로보티즈</div>  <div class='card-meta'>108490 · 345,000원</div>    <div class='card-qty-row'>    <button class='qty-btn' onclick='changeQty(this, -1)'>−</button>    <input type='number' class='qty-input-big' value='3' min='0' step='1'  oninput='recalcAll()'>    <button class='qty-btn' onclick='changeQty(this, 1)'>+</button>    <span class='card-unit'>주</span>  </div>  <div class='card-cost'>매수 비용: <span class='cost-value'>1,035,000</span>원</div></div><div class='buy-card' data-code='357580' data-name='아모센스' data-price='17690' data-no='8'>  <button class='card-delete' onclick='removeCard(this)' aria-label='삭제'>✕</button>  <div class='card-name'>아모센스</div>  <div class='card-meta'>357580 · 17,690원</div>    <div class='card-qty-row'>    <button class='qty-btn' onclick='changeQty(this, -1)'>−</button>    <input type='number' class='qty-input-big' value='43' min='0' step='1'  oninput='recalcAll()'>    <button class='qty-btn' onclick='changeQty(this, 1)'>+</button>    <span class='card-unit'>주</span>  </div>  <div class='card-cost'>매수 비용: <span class='cost-value'>760,670</span>원</div></div><div class='buy-card' data-code='096770' data-name='SK이노베이션' data-price='128500' data-no='9'>  <button class='card-delete' onclick='removeCard(this)' aria-label='삭제'>✕</button>  <div class='card-name'>SK이노베이션</div>  <div class='card-meta'>096770 · 128,500원</div>    <div class='card-qty-row'>    <button class='qty-btn' onclick='changeQty(this, -1)'>−</button>    <input type='number' class='qty-input-big' value='7' min='0' step='1'  oninput='recalcAll()'>    <button class='qty-btn' onclick='changeQty(this, 1)'>+</button>    <span class='card-unit'>주</span>  </div>  <div class='card-cost'>매수 비용: <span class='cost-value'>899,500</span>원</div></div><div class='buy-card' data-code='053610' data-name='프로텍' data-price='86600' data-no='10'>  <button class='card-delete' onclick='removeCard(this)' aria-label='삭제'>✕</button>  <div class='card-name'>프로텍</div>  <div class='card-meta'>053610 · 86,600원</div>    <div class='card-qty-row'>    <button class='qty-btn' onclick='changeQty(this, -1)'>−</button>    <input type='number' class='qty-input-big' value='12' min='0' step='1'  oninput='recalcAll()'>    <button class='qty-btn' onclick='changeQty(this, 1)'>+</button>    <span class='card-unit'>주</span>  </div>  <div class='card-cost'>매수 비용: <span class='cost-value'>1,039,200</span>원</div></div><div class='buy-card' data-code='009830' data-name='한화솔루션' data-price='43000' data-no='11'>  <button class='card-delete' onclick='removeCard(this)' aria-label='삭제'>✕</button>  <div class='card-name'>한화솔루션</div>  <div class='card-meta'>009830 · 43,000원</div>    <div class='card-qty-row'>    <button class='qty-btn' onclick='changeQty(this, -1)'>−</button>    <input type='number' class='qty-input-big' value='20' min='0' step='1'  oninput='recalcAll()'>    <button class='qty-btn' onclick='changeQty(this, 1)'>+</button>    <span class='card-unit'>주</span>  </div>  <div class='card-cost'>매수 비용: <span class='cost-value'>860,000</span>원</div></div><div class='buy-card' data-code='194370' data-name='제이에스코퍼레이션' data-price='13710' data-no='12'>  <button class='card-delete' onclick='removeCard(this)' aria-label='삭제'>✕</button>  <div class='card-name'>제이에스코퍼레이션</div>  <div class='card-meta'>194370 · 13,710원</div>    <div class='card-qty-row'>    <button class='qty-btn' onclick='changeQty(this, -1)'>−</button>    <input type='number' class='qty-input-big' value='67' min='0' step='1'  oninput='recalcAll()'>    <button class='qty-btn' onclick='changeQty(this, 1)'>+</button>    <span class='card-unit'>주</span>  </div>  <div class='card-cost'>매수 비용: <span class='cost-value'>918,570</span>원</div></div><div class='buy-card' data-code='010950' data-name='S-Oil' data-price='114300' data-no='13'>  <button class='card-delete' onclick='removeCard(this)' aria-label='삭제'>✕</button>  <div class='card-name'>S-Oil</div>  <div class='card-meta'>010950 · 114,300원</div>    <div class='card-qty-row'>    <button class='qty-btn' onclick='changeQty(this, -1)'>−</button>    <input type='number' class='qty-input-big' value='7' min='0' step='1'  oninput='recalcAll()'>    <button class='qty-btn' onclick='changeQty(this, 1)'>+</button>    <span class='card-unit'>주</span>  </div>  <div class='card-cost'>매수 비용: <span class='cost-value'>800,100</span>원</div></div><div class='buy-card' data-code='008770' data-name='호텔신라' data-price='62400' data-no='14'>  <button class='card-delete' onclick='removeCard(this)' aria-label='삭제'>✕</button>  <div class='card-name'>호텔신라</div>  <div class='card-meta'>008770 · 62,400원</div>    <div class='card-qty-row'>    <button class='qty-btn' onclick='changeQty(this, -1)'>−</button>    <input type='number' class='qty-input-big' value='15' min='0' step='1'  oninput='recalcAll()'>    <button class='qty-btn' onclick='changeQty(this, 1)'>+</button>    <span class='card-unit'>주</span>  </div>  <div class='card-cost'>매수 비용: <span class='cost-value'>936,000</span>원</div></div><div class='buy-card' data-code='095340' data-name='ISC' data-price='248500' data-no='15'>  <button class='card-delete' onclick='removeCard(this)' aria-label='삭제'>✕</button>  <div class='card-name'>ISC</div>  <div class='card-meta'>095340 · 248,500원</div>    <div class='card-qty-row'>    <button class='qty-btn' onclick='changeQty(this, -1)'>−</button>    <input type='number' class='qty-input-big' value='4' min='0' step='1'  oninput='recalcAll()'>    <button class='qty-btn' onclick='changeQty(this, 1)'>+</button>    <span class='card-unit'>주</span>  </div>  <div class='card-cost'>매수 비용: <span class='cost-value'>994,000</span>원</div></div><div class='buy-card' data-code='089970' data-name='브이엠' data-price='60000' data-no='16'>  <button class='card-delete' onclick='removeCard(this)' aria-label='삭제'>✕</button>  <div class='card-name'>브이엠</div>  <div class='card-meta'>089970 · 60,000원</div>    <div class='card-qty-row'>    <button class='qty-btn' onclick='changeQty(this, -1)'>−</button>    <input type='number' class='qty-input-big' value='19' min='0' step='1'  oninput='recalcAll()'>    <button class='qty-btn' onclick='changeQty(this, 1)'>+</button>    <span class='card-unit'>주</span>  </div>  <div class='card-cost'>매수 비용: <span class='cost-value'>1,140,000</span>원</div></div><div class='buy-card' data-code='327260' data-name='RF머트리얼즈' data-price='118700' data-no='17'>  <button class='card-delete' onclick='removeCard(this)' aria-label='삭제'>✕</button>  <div class='card-name'>RF머트리얼즈</div>  <div class='card-meta'>327260 · 118,700원</div>    <div class='card-qty-row'>    <button class='qty-btn' onclick='changeQty(this, -1)'>−</button>    <input type='number' class='qty-input-big' value='11' min='0' step='1'  oninput='recalcAll()'>    <button class='qty-btn' onclick='changeQty(this, 1)'>+</button>    <span class='card-unit'>주</span>  </div>  <div class='card-cost'>매수 비용: <span class='cost-value'>1,305,700</span>원</div></div><div class='buy-card' data-code='058430' data-name='포스코스틸리온' data-price='7200' data-no='18'>  <button class='card-delete' onclick='removeCard(this)' aria-label='삭제'>✕</button>  <div class='card-name'>포스코스틸리온</div>  <div class='card-meta'>058430 · 7,200원</div>    <div class='card-qty-row'>    <button class='qty-btn' onclick='changeQty(this, -1)'>−</button>    <input type='number' class='qty-input-big' value='118' min='0' step='1'  oninput='recalcAll()'>    <button class='qty-btn' onclick='changeQty(this, 1)'>+</button>    <span class='card-unit'>주</span>  </div>  <div class='card-cost'>매수 비용: <span class='cost-value'>849,600</span>원</div></div><div class='buy-card' data-code='166090' data-name='하나머티리얼즈' data-price='77500' data-no='19'>  <button class='card-delete' onclick='removeCard(this)' aria-label='삭제'>✕</button>  <div class='card-name'>하나머티리얼즈</div>  <div class='card-meta'>166090 · 77,500원</div>    <div class='card-qty-row'>    <button class='qty-btn' onclick='changeQty(this, -1)'>−</button>    <input type='number' class='qty-input-big' value='13' min='0' step='1'  oninput='recalcAll()'>    <button class='qty-btn' onclick='changeQty(this, 1)'>+</button>    <span class='card-unit'>주</span>  </div>  <div class='card-cost'>매수 비용: <span class='cost-value'>1,007,500</span>원</div></div><div class='buy-card' data-code='033240' data-name='자화전자' data-price='43050' data-no='20'>  <button class='card-delete' onclick='removeCard(this)' aria-label='삭제'>✕</button>  <div class='card-name'>자화전자</div>  <div class='card-meta'>033240 · 43,050원</div>    <div class='card-qty-row'>    <button class='qty-btn' onclick='changeQty(this, -1)'>−</button>    <input type='number' class='qty-input-big' value='20' min='0' step='1'  oninput='recalcAll()'>    <button class='qty-btn' onclick='changeQty(this, 1)'>+</button>    <span class='card-unit'>주</span>  </div>  <div class='card-cost'>매수 비용: <span class='cost-value'>861,000</span>원</div></div>
+</div>
+
+<div class='execute-bar'>
+  <button onclick="submitOrder('now')" class='btn primary big'>즉시 시장가 매수</button>
+  <button onclick="submitOrder('pre_0830')" class='btn primary big'>월요일 08:30 장전 예약</button>
+  <button onclick="submitOrder('open_0900')" class='btn primary big'>월요일 09:00 시초가 예약</button>
+</div>
+<p class='execute-note'>확정 시 텔레그램 열림 → 메시지 전송 → 봇 검토 → /confirm 토큰 발급</p>
+
 
 <h2>보유 종목</h2>
 <div class='empty'>보유 종목이 없습니다.</div>
@@ -168,12 +326,105 @@ tbody tr:hover { background: rgba(88,166,255,0.04); }
 
 <div style="margin-top: 32px; padding: 16px; background: var(--bg-card); border: 1px solid var(--border); border-radius: 10px; font-size: 12px; color: var(--text-dim); line-height: 1.6;">
   <b style="color: var(--text);">사용 안내</b><br>
-  • 한국투자증권 KIS 계좌 전용 페이지입니다<br>
-  • 모든 매매는 텔레그램 봇 거쳐서 실행됩니다 (보안)<br>
-  • 버튼 클릭 → 텔레그램 자동 열림 → 전송 버튼 누르면 봇이 처리<br>
+  • 한국투자증권 KIS 계좌 전용<br>
+  • 모든 매매는 텔레그램 봇 거쳐서 실행<br>
   • 데이터는 매번 새로고침 시 갱신<br>
   • 일일 매매 한도: 500만원
 </div>
+
+<script>
+const TG_BOT = "https://t.me/bs_fanding_bot";
+const DAILY_LIMIT = 5000000;
+
+function recalcAll() {
+  let total = 0;
+  document.querySelectorAll(".buy-card:not(.removed)").forEach(card => {
+    const qty = parseInt(card.querySelector(".qty-input-big").value) || 0;
+    const price = parseFloat(card.dataset.price) || 0;
+    const cost = qty * price;
+    card.querySelector(".cost-value").textContent = cost.toLocaleString();
+    total += cost;
+  });
+  const totalEl = document.getElementById("total-cost");
+  if (totalEl) {
+    totalEl.textContent = total.toLocaleString() + "원";
+    totalEl.classList.toggle("over", total > DAILY_LIMIT);
+  }
+  const usageEl = document.getElementById("usage-pct");
+  if (usageEl) {
+    const pct = (total / DAILY_LIMIT * 100).toFixed(1);
+    usageEl.textContent = pct + "%";
+    usageEl.classList.toggle("over", total > DAILY_LIMIT);
+  }
+}
+
+function changeQty(btn, delta) {
+  const input = btn.parentElement.querySelector(".qty-input-big");
+  const cur = parseInt(input.value) || 0;
+  input.value = Math.max(0, cur + delta);
+  recalcAll();
+}
+
+function removeCard(btn) {
+  const card = btn.closest(".buy-card");
+  if (confirm(`${card.dataset.name} 종목을 매수 대상에서 제외할까요?`)) {
+    card.classList.add("removed");
+    recalcAll();
+  }
+}
+
+function resetAllQty() {
+  document.querySelectorAll(".buy-card").forEach(card => {
+    card.classList.remove("removed");
+    const input = card.querySelector(".qty-input-big");
+    if (input) input.value = input.defaultValue;
+  });
+  recalcAll();
+}
+
+function scaleToLimit() {
+  let total = 0;
+  document.querySelectorAll(".buy-card:not(.removed)").forEach(card => {
+    const qty = parseInt(card.querySelector(".qty-input-big").value) || 0;
+    const price = parseFloat(card.dataset.price) || 0;
+    total += qty * price;
+  });
+  if (total <= 0 || total <= DAILY_LIMIT) return;
+  const ratio = DAILY_LIMIT / total;
+  document.querySelectorAll(".buy-card:not(.removed)").forEach(card => {
+    const input = card.querySelector(".qty-input-big");
+    const orig = parseInt(input.value) || 0;
+    input.value = Math.floor(orig * ratio);
+  });
+  recalcAll();
+}
+
+function submitOrder(schedule) {
+  const items = [];
+  let priority = 1;
+  document.querySelectorAll(".buy-card:not(.removed)").forEach(card => {
+    const qty = parseInt(card.querySelector(".qty-input-big").value) || 0;
+    if (qty <= 0 || !card.dataset.code) return;
+    items.push({
+      code: card.dataset.code,
+      name: card.dataset.name,
+      qty: qty,
+      price: parseFloat(card.dataset.price) || 0,
+      priority: priority++
+    });
+  });
+  if (items.length === 0) {
+    alert("매수할 종목이 없습니다.");
+    return;
+  }
+  const payload = JSON.stringify({items: items});
+  const msg = `/batch ${payload} --schedule ${schedule}`;
+  const url = `${TG_BOT}?text=${encodeURIComponent(msg)}`;
+  window.open(url, "_blank");
+}
+
+recalcAll();
+</script>
 
 </div>
 </body>
